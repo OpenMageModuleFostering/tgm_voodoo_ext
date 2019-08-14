@@ -32,8 +32,8 @@
 					<show_in_store>1</show_in_store>
 					<fields>
 						<username translate="label">
-							<label>Voodoo API Username</label>
-                            <comment>Enter your voodoo api Username</comment>
+							<label>Voodoo SMS API Username</label>
+                            <comment>Enter your Voodoo SMS API Username</comment>
                             <tooltip>Your username must be the same as your voodoo api username</tooltip>
 							<frontend_type>text</frontend_type>
 							<sort_order>5</sort_order>
@@ -42,8 +42,8 @@
 							<show_in_store>1</show_in_store>
 						</username>
 						<password translate="label">
-							<label>Voodoo API Password</label>
-                            <comment>Enter your voodoo api Password</comment>
+							<label>Voodoo SMS API Password</label>
+                            <comment>Enter your Voodoo SMS API Password</comment>
                             <tooltip>Your password must be the same as your voodoo api password</tooltip>
 							<frontend_type>password</frontend_type>
 							<sort_order>10</sort_order>
@@ -75,7 +75,7 @@
                             <show_in_store>1</show_in_store>
                         </grabApiAccount>
                         <credits translate="label">
-                            <label>Your Current Credits</label>
+                            <label>Available Credits</label>
                             <comment>Click above to get more credits </comment>
                             <frontend_model>voodoo/credits</frontend_model>
                             <sort_order>25</sort_order>
@@ -106,7 +106,7 @@
                     </fields>
                 </optins>
                 <deno translate="label">
-                    <label>Default Number (Used when OPT-in is set to NO)</label>
+                    <label>Default Number (Used when Opt-in is set to No)</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
@@ -126,7 +126,7 @@
                     </fields>
                 </deno>
 				<orders translate="label">
-					<label>When new order is placed</label>
+					<label>When a New Order is Placed</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>25</sort_order>
 					<show_in_default>1</show_in_default>
@@ -134,8 +134,8 @@
 					<show_in_store>1</show_in_store>
 					<fields>
 						<enabled translate="label comment">
-							<label>Enabled</label>
-                            <comment>This option will send sms when an order is placed</comment>
+							<label>Enable Customer Notification</label>
+                            <comment>This option will send SMS when an Order is Placed</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>5</sort_order>
@@ -156,7 +156,7 @@
 						</sender>
 						<message translate="label comment">
                             <label>Enter the Message</label>
-                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incurs multiple credit charges)</comment>
                             <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
@@ -166,8 +166,8 @@
 							<show_in_store>1</show_in_store>
 						</message>
 						<notify translate="label comment">
-							<label>Admin Alerts</label>
-                            <comment>This option will send sms to the admin when an order is placed</comment>
+							<label>Enable Admin Notifications</label>
+                            <comment>This option will send SMS to the admin when an Order is Placed</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>20</sort_order>
@@ -177,7 +177,7 @@
 						</notify>
 						<receiver translate="label comment">
 							<label>Admin Mobile</label>
-							<comment>ex: 447624803605</comment>
+							<comment>Admin Mobile(s): Enter as many numbers as you like here, comma seperated if multiple e.g. 07700900000,07700900001</comment>
 							<validate>required-entry</validate>
 							<frontend_type>text</frontend_type>
 							<sort_order>25</sort_order>
@@ -200,7 +200,7 @@
 					<fields>
 						<enabled translate="label comment">
 							<label>Enabled</label>
-                            <comment>This option will send sms when order status is set to hold</comment>
+                            <comment>This option will send SMS when an Order Status is set to Hold</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>5</sort_order>
@@ -221,7 +221,7 @@
 						</sender>
 						<message translate="label comment">
                             <label>Enter the Message</label>
-                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incurs multiple credit charges)</comment>
                             <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
@@ -231,8 +231,8 @@
 							<show_in_store>1</show_in_store>
 						</message>
                         <notify translate="label comment">
-                            <label>Admin Alerts</label>
-                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <label>Enable Admin Notifications</label>
+                            <comment>This option will send SMS to the admin when an Order Status is set to Hold</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>30</sort_order>
@@ -242,7 +242,7 @@
                         </notify>
                         <receiver translate="label comment">
                             <label>Admin Mobile</label>
-                            <comment>ex: 447624803605</comment>
+                            <comment>Admin Mobile(s): Enter as many numbers as you like here, comma seperated if multiple e.g. 07700900000,07700900001</comment>
                             <validate>required-entry</validate>
                             <frontend_type>text</frontend_type>
                             <sort_order>25</sort_order>
@@ -265,7 +265,7 @@
 					<fields>
 						<enabled translate="label comment">
 							<label>Enabled</label>
-							<comment>This option will send sms when order status is set to unhold</comment>
+							<comment>This option will send SMS when Order Status is set to Unhold</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>5</sort_order>
@@ -286,7 +286,7 @@
 						</sender>
 						<message translate="label comment">
                             <label>Enter the Message</label>
-							<comment>Your Message Content, (Max 160 character)</comment>
+							<comment>Your Message Content, (Max 918 characters. Text over 160 characters may incurs multiple credit charges)</comment>
                             <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
@@ -296,8 +296,8 @@
 							<show_in_store>1</show_in_store>
 						</message>
                         <notify translate="label comment">
-                            <label>Admin Alerts</label>
-                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <label>Enable Admin Notifications</label>
+                            <comment>This option will send SMS to the Admin when Order Status is set to Unhold</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>20</sort_order>
@@ -307,7 +307,7 @@
                         </notify>
                         <receiver translate="label comment">
                             <label>Admin Mobile</label>
-                            <comment>ex: 447624803605</comment>
+                            <comment>Admin Mobile(s): Enter as many numbers as you like here, comma seperated if multiple e.g. 07700900000,07700900001</comment>
                             <validate>required-entry</validate>
                             <frontend_type>text</frontend_type>
                             <sort_order>25</sort_order>
@@ -330,7 +330,7 @@
 					<fields>
 						<enabled translate="label comment">
 							<label>Enabled</label>
-							<comment>This option will send sms to customer when the order is cancelled</comment>
+							<comment>This option will send SMS to customer when the Order is Cancelled</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>5</sort_order>
@@ -351,7 +351,7 @@
 						</sender>
 						<message translate="label comment">
                             <label>Enter the Message</label>
-                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incurs multiple credit charges)</comment>
                             <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
@@ -361,8 +361,8 @@
 							<show_in_store>1</show_in_store>
 						</message>
                         <notify translate="label comment">
-                            <label>Admin Alerts</label>
-                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <label>Enable Admin Notifications</label>
+                            <comment>This option will send SMS to the Admin when Order is Cancelled</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>20</sort_order>
@@ -372,7 +372,7 @@
                         </notify>
                         <receiver translate="label comment">
                             <label>Admin Mobile</label>
-                            <comment>ex: 447624803605</comment>
+                            <comment>Admin Mobile(s): Enter as many numbers as you like here, comma seperated if multiple e.g. 07700900000,07700900001</comment>
                             <validate>required-entry</validate>
                             <frontend_type>text</frontend_type>
                             <sort_order>25</sort_order>
@@ -386,7 +386,7 @@
 					</fields>
 				</order_canceled>
 				<shipments translate="label">
-					<label>When Order is set for shipment</label>
+					<label>When Order is Shipped</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>45</sort_order>
 					<show_in_default>1</show_in_default>
@@ -395,7 +395,7 @@
 					<fields>
 						<enabled translate="label comment">
 							<label>Enabled</label>
-							<comment>It will send sms when the order send on shipment</comment>
+							<comment>It will send SMS when the Order is Shipped</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>5</sort_order>
@@ -416,7 +416,7 @@
 						</sender>
 						<message translate="label comment">
                             <label>Enter the Message</label>
-                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incurs multiple credit charges)</comment>
                             <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
@@ -426,8 +426,8 @@
 							<show_in_store>1</show_in_store>
 						</message>
                         <notify translate="label comment">
-                            <label>Admin Alerts</label>
-                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <label>Enable Admin Notifications</label>
+                            <comment>This option will send SMS to the admin when an Order is Shipped</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>20</sort_order>
@@ -437,7 +437,7 @@
                         </notify>
                         <receiver translate="label comment">
                             <label>Admin Mobile</label>
-                            <comment>ex: 447624803605</comment>
+                            <comment>Admin Mobile(s): Enter as many numbers as you like here, comma seperated if multiple e.g. 07700900000,07700900001</comment>
                             <validate>required-entry</validate>
                             <frontend_type>text</frontend_type>
                             <sort_order>25</sort_order>

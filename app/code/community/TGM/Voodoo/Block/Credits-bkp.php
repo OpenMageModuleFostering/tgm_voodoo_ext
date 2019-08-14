@@ -5,7 +5,7 @@ class TGM_Voodoo_Block_Credits extends Mage_Adminhtml_Block_System_Config_Form_F
     {
         $this->setElement($element);
         $credit = Mage::getModel('voodoo/voodoo')->getCredit();
-        if ($credit == false) {
+        if ($credit == '401:	Unauthorized') {
             $credit = 'There is an error check verification message';
             $html ="<div style='font-size: 12px;'>$credit</div><a target='_blank' href='https://www.voodoosms.com/portal/account/addcredit'>Add More Credits</a>";
         }

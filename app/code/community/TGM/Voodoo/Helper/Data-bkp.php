@@ -239,13 +239,25 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
             $sendSms = '';
 		}
 		if($sendSms) {
-			switch($sendSms->result) {
-				case '401':
+			switch($sendSms) {
+				case '401:	Unauthorized':
 					$status_message = Mage::helper('voodoo')->__('Voodoo Username or password incorrect (UNAUTHORIZED).');
 					$status = Mage::helper('voodoo')->__('Not sent');
 					break;
-				case '400':
+				case '403:	Forbidden':
 					$status_message = Mage::helper('voodoo')->__('Wrong Number Inserted (FORBIDDEN).');
+					$status = Mage::helper('voodoo')->__('Not sent');
+					break;
+				case '400:	Bad request':
+					$status_message = Mage::helper('voodoo')->__('There might be something wrong happened (BAD REQUEST).');
+					$status = Mage::helper('voodoo')->__('Not sent');
+					break;
+				case '402:	Not enough credit':
+					$status_message = Mage::helper('voodoo')->__('Insufficient Credit to send (NOT ENOUGH CREDIT).');
+					$status = Mage::helper('voodoo')->__('Not sent');
+					break;
+				case '513:	Message too Large':
+					$status_message = Mage::helper('voodoo')->__('Too long message to send (LARGE MESSAGE).');
 					$status = Mage::helper('voodoo')->__('Not sent');
 					break;
 				default:
@@ -270,16 +282,11 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
 		curl_setopt($ch, CURLOPT_URL, $url);
 		$data = curl_exec($ch);
 		curl_close($ch);
-        $data = json_decode($data);
 		return $data;
 	}
     public function credits($url){
         $credits = $this->file_get_contents_curl($url);
-        if($credits->credit){
-            return $credits->credit;
-        }else{
-            return false;
-        }
+        return $credits;
     }
     public function verify_api($url)
     {
@@ -291,13 +298,6 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
         $verify_others = $this->file_get_contents_curl($url);
         return $verify_others;
     }
-
-    public function verify_number($url)
-    {
-        $verify_number = $this->file_get_contents_curl($url);
-        return $verify_number;
-    }
-
     public function exportOrder($order,$sendSms)
     {
         $dirPath = Mage::getBaseDir('var') . DS . 'export';

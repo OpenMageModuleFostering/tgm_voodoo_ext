@@ -13,10 +13,10 @@ class TGM_Voodoo_Model_Voodoo extends Mage_Core_Model_Abstract
         $username = Mage::helper('voodoo/Data')->getUsername();
         $password = Mage::helper('voodoo/Data')->getPassword();
         $host = "http://www.voodoosms.com/";
-        $path = "vsapi/server.php";
-        $data  = '?method=get_credit';
-        $data  .= '&username=' . urlencode($username);
-        $data .= '&password=' . urlencode($password);
+        $path = "vapi/server/getcredit";
+        $data = '?uid=' . urlencode($username);
+        $data .= '&pass=' . urlencode($password);
+        $data .= '&format=json';
         $url = $host.$path.$data;
         $credits = Mage::helper('voodoo/Data')->credits($url);
         return $credits;

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+
+<checkout_onepage_index>
+	<reference name="checkout.onepage">
+		<!-- Extra step added to OnePage Checkout -->
+		<block type="voodoo/onepage_voodoo" name="checkout.onepage.voodoo" as="voodoo" after="checkout.onepage.billing" template="checkout/onepage/voodoo.phtml"/>		
+	</reference>
+</checkout_onepage_index>
+
+</layout>
