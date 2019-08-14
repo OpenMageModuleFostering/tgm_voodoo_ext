@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * @category   TGM
+ * @package    TGM_Voodoo
+ * @author     TGM
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config>
+    <modules>
+        <TGM_Voodoo>
+            <version>1.0.0</version>
+        </TGM_Voodoo>
+    </modules>
+    <admin>
+        <routers>
+			<voodoo>
+				<use>admin</use>
+				<args>
+					<module>TGM_Voodoo</module>
+					<frontName>voodoo</frontName>
+				</args>
+			</voodoo>
+        </routers>
+    </admin>
+    <adminhtml>
+		<translate>
+			<modules>
+				<tgm_voodoo>
+					<files>
+						<default>TGM_Voodoo.csv</default>
+					</files>
+				</tgm_voodoo>
+			</modules>
+        </translate>
+		<menu>
+			<voodoo translate="title" module="voodoo">
+				<title>SMS</title>
+				<sort_order>60</sort_order>
+				<children>
+                    <settings translate="title" module="voodoo">
+						<title>Settings</title>
+						<sort_order>15</sort_order>
+						<action>adminhtml/system_config/edit/section/voodoo</action>
+					</settings>
+				</children>
+			</voodoo>
+		</menu>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin>
+					<children>
+						<voodoo translate="title" module="voodoo">
+							<title>Voodoo Sms</title>
+							<sort_order>15</sort_order>
+							<children>
+								<settings translate="title" module="voodoo">
+									<title>Settings</title>
+									<sort_order>15</sort_order>
+								</settings>
+							</children>
+						</voodoo>
+						<system>
+							<children>
+								<config>
+									<children>
+										<voodoo translate="title" module="voodoo">
+											<title>Voodoo SMS</title>
+											<sort_order>15</sort_order>
+										</voodoo>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+		<layout>
+			<updates>
+				<voodoo>
+					<file>voodoo.xml</file>
+				</voodoo>
+			</updates>
+		</layout>
+    </adminhtml>   
+    <global>
+        <models>
+            <voodoo>
+                <class>TGM_Voodoo_Model</class>
+                <resourceModel>voodoo_mysql4</resourceModel>
+            </voodoo>
+            <voodoo_mysql4>
+                <class>TGM_Voodoo_Model_Mysql4</class>
+                <entities>
+                    <voodoo>
+                        <table>voodoo</table>
+                    </voodoo>
+                </entities>
+            </voodoo_mysql4>
+        </models>
+        <resources>
+            <voodoo_setup>
+                <setup>
+                    <module>TGM_Voodoo</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </voodoo_setup>
+            <voodoo_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </voodoo_write>
+            <voodoo_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </voodoo_read>
+        </resources>
+        <blocks>
+            <voodoo>
+                <class>TGM_Voodoo_Block</class>
+            </voodoo>
+        </blocks>
+        <helpers>
+            <voodoo>
+                <class>TGM_Voodoo_Helper</class>
+            </voodoo>
+        </helpers>
+		<events>
+			<checkout_onepage_controller_success_action>
+                <observers>
+                    <TGM_Voodoo_Created>
+						<type>singleton</type>
+                        <class>TGM_Voodoo_Model_Observer</class>
+                        <method>sendSmsOnOrderCreated</method>
+                    </TGM_Voodoo_Created>
+                </observers>
+            </checkout_onepage_controller_success_action>
+			<sales_order_save_after>
+				<observers>
+                    <TGM_Voodoo_Order_Hold>
+						<type>singleton</type>
+                        <class>TGM_Voodoo_Model_Observer</class>
+                        <method>sendSmsOnOrderHold</method>
+                    </TGM_Voodoo_Order_Hold>
+					<TGM_Voodoo_Order_Unhold>
+						<type>singleton</type>
+                        <class>TGM_Voodoo_Model_Observer</class>
+                        <method>sendSmsOnOrderUnhold</method>
+                    </TGM_Voodoo_Order_Unhold>
+					<TGM_Voodoo_Order_Canceled>
+						<type>singleton</type>
+                        <class>TGM_Voodoo_Model_Observer</class>
+                        <method>sendSmsOnOrderCanceled</method>
+                    </TGM_Voodoo_Order_Canceled>
+                </observers>
+			</sales_order_save_after>
+			<sales_order_shipment_save_after>
+                <observers>
+                    <TGM_Voodoo_Shipment_Created>
+						<type>singleton</type>
+                        <class>TGM_Voodoo_Model_Observer</class>
+                        <method>sendSmsOnShipmentCreated</method>
+                    </TGM_Voodoo_Shipment_Created>
+                </observers>
+            </sales_order_shipment_save_after>
+		</events>
+    </global>
+	<default>
+		<voodoo>
+			<orders>
+				<enabled>0</enabled>
+				<sender>Your Store</sender>
+				<message>Hello {{firstname}}. We have received your order. Thanks alot</message>
+				<notify>0</notify>
+			</orders>
+			<order_hold>
+				<enabled>0</enabled>
+				<sender>Your Store</sender>
+				<message>Hello {{firstname}}. Your order is on hold. Order id is {{order_id}}</message>
+			</order_hold>
+			<order_unhold>
+				<enabled>0</enabled>
+				<sender>Your Store</sender>
+				<message>Hello {{firstname}}. Your status is now unhold for order {{order_id}}.</message>
+			</order_unhold>
+			<order_canceled>
+				<enabled>0</enabled>
+				<sender>Your Store</sender>
+				<message>Hello {{firstname}}. Sorry your order has been cancelled. Order number {{order_id}}</message>
+			</order_canceled>
+			<shipments>
+				<enabled>0</enabled>
+				<sender>Your Store</sender>
+				<message>Hello {{firstname}}. Your order is now on shipment. You will get it soon. Thank you for buying from us.</message>
+			</shipments>
+		</voodoo>
+	</default>
+</config>

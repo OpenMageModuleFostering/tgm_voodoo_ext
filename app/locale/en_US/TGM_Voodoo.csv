@@ -1,0 +1,53 @@
+Voodoo,Voodoo
+Manage Text Messages,Manage Text Messages
+Send Manual Message(s),Send Manual Message(s)
+Settings,Settings
+Sms Notifications,Sms Notifications
+Buy Credits/Pricing,Buy Credits/Pricing
+Getting Started,Getting Started
+Get an Account,Get an Account
+Get a FREE account with 5 FREE credits,Get a FREE account with 5 FREE credits
+If you are outside the UK please email magentosms@24xemail.com for an account. This is to ensure that your account will operate through the fastest and most reliable routes within your country.,If you are outside the UK please email magentosms@24xemail.com for an account. This is to ensure that your account will operate through the fastest and most reliable routes within your country.
+General,General
+Voodoo Username,Voodoo Username
+Voodoo Password,Voodoo Password
+Orders,Orders
+Enabled,Enabled
+Automatically sends a text message to the customer when an order is made,Automatically sends a text message to the customer when an order is made
+Sender,Sender
+Name of the sender,Name of the sender
+Message,Message
+Message Template (160 characters),Message Template (160 characters)
+Notify Admin,Notify Admin
+Automatically sends a text message also to the Admin when an order is made,Automatically sends a text message also to the Admin when an order is made
+Admin Telephone,Admin Telephone
+ex: +40740123456,ex: +40740123456
+A new order has been placed: %s,A new order has been placed: %s
+Order Hold,Order Hold
+Automatically sends a text message to the customer when an order is placed on hold,Automatically sends a text message to the customer when an order is placed on hold
+Order Canceled,Order Canceled
+Automatically sends a text message to the customer when an order has been canceled,Automatically sends a text message to the customer when an order has been canceled
+Order Unhold,Order Unhold
+Automatically sends a text message to the customer when an order has been released from holding status,Automatically sends a text message to the customer when an order has been released from holding status
+Send Manual SMS,Send Manual SMS
+From,From
+To (or Order number)," ""To (or Order number)"""
+Voodoo Username or password incorrect.,Voodoo Username or password incorrect.
+SmsTo missing.,SmsTo missing.
+SmsFrom missing.,SmsFrom missing.
+SmsMsg missing.,SmsMsg missing.
+Insufficient credits.,Insufficient credits.
+Sms successfully sent.,Sms successfully sent.
+Not sent,Not sent
+Sent,Sent
+Not able to send the sms. Please contact the developer.,Not able to send the sms. Please contact the developer.
+Name or Telephone,Name or Telephone
+Telephone (ex: +40740123456),Telephone (ex: +40740123456)
+Telephone (ex: +40740123456 or 100000001),Telephone (ex: +40740123456 or 100000001)
+Order,Order
+Admin Notification,Admin Notification
+Shipment,Shipment
+Manual SMS,Manual SMS
+Shipments,Shipments
+Automatically sends a text message to the customer when the shipment is made,Automatically sends a text message to the customer when the shipment is made
+There was an error while getting the 24x interface. Please contact the developer.,There was an error while getting the 24x interface. Please contact the developer.

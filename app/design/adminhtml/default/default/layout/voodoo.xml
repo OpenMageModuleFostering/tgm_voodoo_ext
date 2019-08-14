@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <voodoo_adminhtml_voodoo_index>
+        <reference name="content">
+            <block type="voodoo/adminhtml_voodoo" name="voodoo" />
+        </reference>
+    </voodoo_adminhtml_voodoo_index>
+</layout>

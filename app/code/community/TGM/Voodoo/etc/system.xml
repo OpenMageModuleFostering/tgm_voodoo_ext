@@ -1,0 +1,424 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+		<tgm translate="label" module="voodoo">
+            <label><![CDATA[<div style="position: absolute;"><img id="magepal_block" style="height:20px; width:65px;" src="" alt="" border="0" /></div>&nbsp;<script>$('magepal_block').src = SKIN_URL + "images/magepal.png";</script>]]></label>
+            <sort_order>1000</sort_order>
+		</tgm>
+    </tabs>
+	<sections>
+		<voodoo translate="label" module="voodoo">
+			<label>SMS - Settings</label>
+			<tab>tgm</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>75</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<header>
+                    <frontend_model>voodoo/backend_page_header</frontend_model>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </header>
+				<enter translate="label">
+					<label>Enter API Username and Password</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<username translate="label">
+							<label>Voodoo API Username</label>
+                            <comment>Enter your voodoo api Username</comment>
+                            <tooltip>Your username must be the same as your voodoo api username</tooltip>
+							<frontend_type>text</frontend_type>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</username>
+						<password translate="label">
+							<label>Voodoo API Password</label>
+                            <comment>Enter your voodoo api Password</comment>
+                            <tooltip>Your password must be the same as your voodoo api password</tooltip>
+							<frontend_type>password</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</password>
+                        <verify translate="label">
+                            <frontend_model>voodoo/verifyApiAccount</frontend_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </verify>
+                        <verifiesss translate="label">
+                            <frontend_model>voodoo/otherVerifications</frontend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </verifiesss>
+                        <grabApiAccount translate="label">
+                            <label>Create API Login</label>
+                            <comment>Click above to set an API username and password</comment>
+                            <frontend_model>voodoo/grabApiAccount</frontend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </grabApiAccount>
+                        <credits translate="label">
+                            <label>Your Current Credits</label>
+                            <comment>Click above to get more credits </comment>
+                            <frontend_model>voodoo/credits</frontend_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </credits>
+					</fields>
+				</enter>
+				<orders translate="label">
+					<label>When new order is placed</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>15</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label comment">
+							<label>Enabled</label>
+                            <comment>This option will send sms when an order is placed</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</enabled>
+						<sender translate="label comment">
+                            <label>Enter the Sender ID</label>
+                            <comment>‘Company’ e.g. 'My Store’ (max: 11 alphanumeric characters. This is who the SMS will appear from when received)</comment>
+                            <tooltip>You can enter upto 11 digits or characters</tooltip>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-11</validate>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sender>
+						<message translate="label comment">
+                            <label>Enter the Message</label>
+                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</message>
+						<notify translate="label comment">
+							<label>Admin Alerts</label>
+                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</notify>
+						<receiver translate="label comment">
+							<label>Admin Mobile</label>
+							<comment>ex: 447624803605</comment>
+							<validate>required-entry</validate>
+							<frontend_type>text</frontend_type>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+                                <notify>1</notify>
+                            </depends>
+						</receiver>
+					</fields>
+				</orders>
+				<order_hold translate="label">
+					<label>When Order Status is set to Hold</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>20</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label comment">
+							<label>Enabled</label>
+                            <comment>This option will send sms when order status is set to hold</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</enabled>
+						<sender translate="label comment">
+                            <label>Enter the Sender ID</label>
+                            <comment>‘Company’ e.g. 'My Store’ (max: 11 alphanumeric characters. This is who the SMS will appear from when received)</comment>
+                            <tooltip>You can enter upto 11 digits or characters</tooltip>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-11</validate>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sender>
+						<message translate="label comment">
+                            <label>Enter the Message</label>
+                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</message>
+                        <notify translate="label comment">
+                            <label>Admin Alerts</label>
+                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </notify>
+                        <receiver translate="label comment">
+                            <label>Admin Mobile</label>
+                            <comment>ex: 447624803605</comment>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <notify>1</notify>
+                            </depends>
+                        </receiver>
+					</fields>
+				</order_hold>
+				<order_unhold translate="label">
+					<label>When Order Status is set to Unhold</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>25</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label comment">
+							<label>Enabled</label>
+							<comment>This option will send sms when order status is set to unhold</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</enabled>
+						<sender translate="label comment">
+                            <label>Enter the Sender ID</label>
+                            <comment>‘Company’ e.g. 'My Store’ (max: 11 alphanumeric characters. This is who the SMS will appear from when received)</comment>
+                            <tooltip>You can enter upto 11 digits or characters</tooltip>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-11</validate>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sender>
+						<message translate="label comment">
+                            <label>Enter the Message</label>
+							<comment>Your Message Content, (Max 160 character)</comment>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</message>
+                        <notify translate="label comment">
+                            <label>Admin Alerts</label>
+                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </notify>
+                        <receiver translate="label comment">
+                            <label>Admin Mobile</label>
+                            <comment>ex: 447624803605</comment>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <notify>1</notify>
+                            </depends>
+                        </receiver>
+					</fields>
+				</order_unhold>
+				<order_canceled translate="label">
+					<label>When Order is Cancelled</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>30</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label comment">
+							<label>Enabled</label>
+							<comment>This option will send sms to customer when the order is cancelled</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</enabled>
+						<sender translate="label comment">
+                            <label>Enter the Sender ID</label>
+                            <comment>‘Company’ e.g. 'My Store’ (max: 11 alphanumeric characters. This is who the SMS will appear from when received)</comment>
+                            <tooltip>You can enter upto 11 digits or characters</tooltip>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-11</validate>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sender>
+						<message translate="label comment">
+                            <label>Enter the Message</label>
+                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</message>
+                        <notify translate="label comment">
+                            <label>Admin Alerts</label>
+                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </notify>
+                        <receiver translate="label comment">
+                            <label>Admin Mobile</label>
+                            <comment>ex: 447624803605</comment>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <notify>1</notify>
+                            </depends>
+                        </receiver>
+					</fields>
+				</order_canceled>
+				<shipments translate="label">
+					<label>When Order is set for shipment</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>35</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label comment">
+							<label>Enabled</label>
+							<comment>It will send sms when the order send on shipment</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</enabled>
+						<sender translate="label comment">
+                            <label>Enter the Sender ID</label>
+                            <comment>‘Company’ e.g. 'My Store’ (max: 11 alphanumeric characters. This is who the SMS will appear from when received)</comment>
+                            <tooltip>You can enter upto 11 digits or characters</tooltip>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-11</validate>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sender>
+						<message translate="label comment">
+                            <label>Enter the Message</label>
+                            <comment>Your Message Content, (Max 160 character)</comment>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</message>
+                        <notify translate="label comment">
+                            <label>Admin Alerts</label>
+                            <comment>This option will send sms to the admin when an order is placed</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </notify>
+                        <receiver translate="label comment">
+                            <label>Admin Mobile</label>
+                            <comment>ex: 447624803605</comment>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <notify>1</notify>
+                            </depends>
+                        </receiver>
+					</fields>
+				</shipments>
+                <footer>
+                    <frontend_model>voodoo/backend_page_footer</frontend_model>
+                    <sort_order>71</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </footer>
+			</groups>
+
+		</voodoo>
+    </sections>
+</config>
