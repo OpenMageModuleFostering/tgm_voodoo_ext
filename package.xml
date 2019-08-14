@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>TGM_Voodoo_Ext</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <stability>stable</stability>
     <license uri="http://opensource.org/licenses/osl-3.0.php">OSL v3.0</license>
     <channel>community</channel>
@@ -35,8 +35,8 @@ Release Version: &#x2018;1.0.0'&#xD;
 Release Stability: 'Stable'</description>
     <notes>Release Notes</notes>
     <authors><author><name>Top Gear Media</name><user>bulksms</user><email>team@voodoosms.com</email></author></authors>
-    <date>2014-06-25</date>
-    <time>13:13:38</time>
+    <date>2014-06-30</date>
+    <time>10:03:03</time>
     <contents><target name="magecommunity"><dir name="TGM"><dir name="Voodoo"><dir name="Block"><dir name="Backend"><dir name="Page"><file name="Footer.php" hash="c7a672484710de89eb6af0524da0bf83"/><file name="Header.php" hash="079f7c8873efbc5f8fcedfa9693508f5"/></dir></dir><file name="Credits.php" hash="f4473f43731901738a4cf079b2338e18"/><file name="GrabAccount.php" hash="3cd93790751c055d2bbb3a8498f25671"/><file name="GrabApiAccount.php" hash="79850ed22302447ac5e3a4ca905a1f55"/><file name="OtherVerifications.php" hash="5ac53ed1f31324f79181baf3287341a0"/><file name="VerifyApiAccount.php" hash="24cbec5d74d126a210af1d48e28a6262"/></dir><dir name="Helper"><file name="Data-test.php" hash="fd966d8e4228fe12db45a6c7cc2d00ba"/><file name="Data.php" hash="3cbb62d6c5637288d2b4596958c26bfd"/></dir><dir name="Model"><dir name="Mysql4"><dir name="Mysql4"><dir name="Voodoo"><file name="Collection.php" hash="c97ac45e6c51ddb7ce3349561a542561"/></dir><file name="Voodoo.php" hash="a4bf4656536e83dfc07557b7748a6a42"/></dir><dir name="Voodoo"><file name="Collection.php" hash="c97ac45e6c51ddb7ce3349561a542561"/></dir><file name="Voodoo.php" hash="a4bf4656536e83dfc07557b7748a6a42"/></dir><file name="Observer.php" hash="53d09851c42f019374e47b486e65fdbc"/><file name="Observerrrr.php" hash="4b35d15fd32bb11722e7b502bc6ebffa"/><file name="Voodoo.php" hash="897384a33203189e4756da6cf5588acb"/></dir><dir name="controllers"><file name="IndexController.php" hash="50654ac2e787445270ca5a9500534814"/></dir><dir name="etc"><file name="config.xml" hash="f4816e36dd294eab6e5ca00e9f56af36"/><file name="system.xml" hash="231a1470e4d7af188dc6830d34e5aa3a"/></dir><dir name="sql"><dir name="voodoo_setup"><file name="mysql4-install-1.0.0.php" hash="a5655c337e114fc9e5ebc2dafb219ae2"/></dir></dir></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="layout"><file name="voodoo.xml" hash="bc7bef231534b55ebbeb52f9c77b56b6"/></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="TGM_Voodoo.xml" hash="bcde093f727f9acafb250e280873b4e7"/></dir></target><target name="magelocale"><dir name="en_US"><file name="TGM_Voodoo.csv" hash="70e4f1215f0542fce3651720c32ce67a"/></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="images"><file name="magepal.png" hash="24887cb06828b73676ab1dcd69977c79"/></dir></dir></dir></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.1.0</min><max>6.0.0</max></php></required></dependencies>
