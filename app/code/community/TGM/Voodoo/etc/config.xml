@@ -10,7 +10,7 @@
 <config>
     <modules>
         <TGM_Voodoo>
-            <version>3.1.2</version>
+            <version>3.2.2</version>
         </TGM_Voodoo>
     </modules>
     <admin>

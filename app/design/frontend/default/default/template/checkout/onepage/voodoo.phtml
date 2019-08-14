@@ -1,0 +1,109 @@
+<form id="co-voodoo-form" action="">
+    <?php
+    if (Mage::getStoreConfig('voodoo/optins/enabled') == 1) {
+        ?>
+        <div class="field name-optin">
+            <label for="getvoice">
+                To receive an SMS notification for delivery status please enter the mobile number
+                here</label>
+            <div class="input-box">
+                <input type="tel" title="Mobile Number" class="input-text" name="getvoice" id="getvoice"
+                       placeholder="Enter Number">
+
+            </div>
+        </div>
+    <?php }
+    else{
+    ?>
+        <p>You will get an order confirmation sms on the <?php if(Mage::getStoreConfig('voodoo/deno/bish') == 0){ ?>Billing <?php }else{ ?>Shipping<?php } ?> number provided by you</p>
+    <?php
+    } ?>
+</form>
+
+<div class="buttons-set" style="">
+    <div id="voodoo-buttons-container">
+        <button type="button" class="button" onclick="voodoo.save();"><span><?php echo $this->__('Continue') ?></span>
+        </button>
+        <span id="voodoo-please-wait" style="display:none;" class="opc-please-wait">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle"
+                 alt=""/> &nbsp; <?php echo $this->__('Loading next step...') ?> &nbsp;
+        </span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+    var Voodoo = Class.create();
+    Voodoo.prototype = {
+        initialize: function (form, saveUrl) {
+            this.form = form;
+            if ($(this.form)) {
+                $(this.form).observe('submit', function (event) {
+                    this.save();
+                    Event.stop(event);
+                }.bind(this));
+            }
+            this.saveUrl = saveUrl;
+            this.onSave = this.nextStep.bindAsEventListener(this);
+            this.onComplete = this.resetLoadWaiting.bindAsEventListener(this);
+        },
+
+        save: function () {
+            if (checkout.loadWaiting != false) return;
+
+            var validator = new Validation(this.form);
+            if (validator.validate()) {
+
+                checkout.setLoadWaiting('voodoo');
+
+
+                var request = new Ajax.Request(
+                    this.saveUrl,
+                    {
+                        method: 'post',
+                        onComplete: this.onComplete,
+                        onSuccess: this.onSave,
+                        onFailure: checkout.ajaxFailure.bind(checkout),
+                        parameters: Form.serialize(this.form)
+                    }
+                );
+            }
+        },
+
+        resetLoadWaiting: function (transport) {
+            checkout.setLoadWaiting(false);
+        },
+
+        nextStep: function (transport) {
+            if (transport && transport.responseText) {
+                try {
+                    response = eval('(' + transport.responseText + ')');
+                }
+                catch (e) {
+                    response = {};
+                }
+            }
+
+            if (response.error) {
+                if ((typeof response.message) == 'string') {
+                    alert(response.message);
+                } else {
+                    if (window.billingRegionUpdater) {
+                        billingRegionUpdater.update();
+                    }
+
+                    alert(response.message.join("\n"));
+                }
+
+                return false;
+            }
+
+            checkout.setStepResponse(response);
+        }
+    }
+
+    var voodoo = new Voodoo('co-voodoo-form', '<?php echo $this->getUrl('checkout/onepage/saveVoodoo') ?>');
+
+    //]]>
+</script>
