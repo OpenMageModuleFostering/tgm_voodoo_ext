@@ -1,4 +1,5 @@
 <?php
+
 class TGM_Voodoo_Model_Observer
 {
     const ORDER_ATTRIBUTE_FHC_ID = 'voodoo';
@@ -49,40 +50,48 @@ class TGM_Voodoo_Model_Observer
                         } catch (Exception $e) {
                         }
                     }
-
-
-                    if ($this->getHelper()->isOrdersNotify() and $this->getHelper()->getAdminTelephone()) {
-                        $smsto = $this->getHelper()->getAdminTelephone();
-                        $smsmsg = Mage::helper('voodoo')->__('A new order has been placed: %s', $order->getIncrementId());
-                        $data = '?uid=' . urlencode($username);
-                        $data .= '&pass=' . urlencode($password);
-                        $data .= '&dest=' . urlencode($smsto);
-                        $data .= '&orig=' . urlencode($smsfrom);
-                        $data .= '&msg=' . urlencode($smsmsg);
-                        $data .= '&validity=300&format=json';
-                        $url = $host . $path . $data;
-                        $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
-                        $verify_number = $this->getHelper()->verify_number($verify_number_url);
-                        if ($verify_number->result == 200) {
-                            $sendSms = $this->getHelper()->voodoo($url);
-                            try {
-                                Mage::getModel('voodoo/voodoo')
-                                    ->setOrderId($order->getIncrementId())
-                                    ->setFrom($smsfrom)
-                                    ->setTo($smsto)
-                                    ->setSmsMessage($smsmsg)
-                                    ->setStatus($sendSms['status'])
-                                    ->setStatusMessage($sendSms['status_message'])
-                                    ->setCreatedTime(now())
-                                    ->save();
-                            } catch (Exception $e) {
-                            }
-                        }
+                }
+            }
+        }
+        if ($this->getHelper()->isOrdersNotify() and $this->getHelper()->getAdminTelephone()) {
+            $orders = $observer->getEvent()->getOrderIds();
+            $order = Mage::getModel('sales/order')->load($orders['0']);
+            if ($order instanceof Mage_Sales_Model_Order) {
+                $host = "http://www.voodoosms.com/";
+                $path = "vapi/server/sendSMS";
+                $username = $this->getHelper()->getUsername();
+                $password = $this->getHelper()->getPassword();
+                $smsfrom = $this->getHelper()->getSender();
+                $smsto = $this->getHelper()->getAdminTelephone();
+                $smsmsg = Mage::helper('voodoo')->__('A new order has been placed: %s', $order->getIncrementId());
+                $data = '?uid=' . urlencode($username);
+                $data .= '&pass=' . urlencode($password);
+                $data .= '&dest=' . urlencode($smsto);
+                $data .= '&orig=' . urlencode($smsfrom);
+                $data .= '&msg=' . urlencode($smsmsg);
+                $data .= '&validity=300&format=json';
+                $url = $host . $path . $data;
+                $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                if ($verify_number->result == 200) {
+                    $sendSms = $this->getHelper()->voodoo($url);
+                    try {
+                        Mage::getModel('voodoo/voodoo')
+                            ->setOrderId($order->getIncrementId())
+                            ->setFrom($smsfrom)
+                            ->setTo($smsto)
+                            ->setSmsMessage($smsmsg)
+                            ->setStatus($sendSms['status'])
+                            ->setStatusMessage($sendSms['status_message'])
+                            ->setCreatedTime(now())
+                            ->save();
+                    } catch (Exception $e) {
                     }
                 }
             }
         }
     }
+
 
     public function sendSmsOnOrderHold(Varien_Event_Observer $observer)
     {
@@ -92,6 +101,20 @@ class TGM_Voodoo_Model_Observer
                 if ($order->getState() !== $order->getOrigData('state') && $order->getState() === Mage_Sales_Model_Order::STATE_HOLDED) {
                     if ($this->getHelper()->isOptinsEnabled()) {
                         $smsto = Mage::getSingleton('core/session')->getTGMVoodoo();
+                        if ($smsto == '') {
+                            $resource = Mage::getSingleton('core/resource');
+                            $readConnection = $resource->getConnection('core_read');
+                            $query = "SELECT sms_number FROM voodoo_number where order_id =" . $order->getIncrementId() . " LIMIT 1";
+                            $results = $readConnection->fetchRow($query);
+                            $smsto = $results['sms_number'];
+                            if ($smsto == '') {
+                                if ($this->getHelper()->isbillingorshipping() == 0) {
+                                    $smsto = $this->getHelper()->getTelephoneFromOrder($order);
+                                } else {
+                                    $smsto = $order->getShippingAddress()->getTelephone();
+                                }
+                            }
+                        }
                     } else {
                         if ($this->getHelper()->isbillingorshipping() == 0) {
                             $smsto = $this->getHelper()->getTelephoneFromOrder($order);
@@ -130,33 +153,43 @@ class TGM_Voodoo_Model_Observer
                             } catch (Exception $e) {
                             }
                         }
-                        if ($this->getHelper()->isOrdersHoldNotify() and $this->getHelper()->getAdminHoldTelephone()) {
-                            $smsto = $this->getHelper()->getAdminHoldTelephone();
-                            $smsmsg = Mage::helper('voodoo')->__('%s has been placed on hold', $order->getIncrementId());
-                            $data = '?uid=' . urlencode($username);
-                            $data .= '&pass=' . urlencode($password);
-                            $data .= '&dest=' . urlencode($smsto);
-                            $data .= '&orig=' . urlencode($smsfrom);
-                            $data .= '&msg=' . urlencode($smsmsg);
-                            $data .= '&validity=300&format=json';
-                            $url = $host . $path . $data;
-                            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
-                            $verify_number = $this->getHelper()->verify_number($verify_number_url);
-                            if ($verify_number->result == 200) {
-                                $sendSms = $this->getHelper()->voodoo($url);
-                                try {
-                                    Mage::getModel('voodoo/voodoo')
-                                        ->setOrderId($order->getIncrementId())
-                                        ->setFrom($smsfrom)
-                                        ->setTo($smsto)
-                                        ->setSmsMessage($smsmsg)
-                                        ->setStatus($sendSms['status'])
-                                        ->setStatusMessage($sendSms['status_message'])
-                                        ->setCreatedTime(now())
-                                        ->save();
-                                } catch (Exception $e) {
-                                }
-                            }
+                    }
+                }
+            }
+        }
+        if ($this->getHelper()->isOrdersHoldNotify() and $this->getHelper()->getAdminHoldTelephone()) {
+            $order = $observer->getOrder();
+            if ($order instanceof Mage_Sales_Model_Order) {
+                if ($order->getState() !== $order->getOrigData('state') && $order->getState() === Mage_Sales_Model_Order::STATE_HOLDED) {
+                    $host = "http://www.voodoosms.com/";
+                    $path = "vapi/server/sendSMS";
+                    $username = $this->getHelper()->getUsername();
+                    $password = $this->getHelper()->getPassword();
+                    $smsfrom = $this->getHelper()->getSenderForOrderHold();
+                    $smsto = $this->getHelper()->getAdminHoldTelephone();
+                    $smsmsg = Mage::helper('voodoo')->__('%s has been placed on hold', $order->getIncrementId());
+                    $data = '?uid=' . urlencode($username);
+                    $data .= '&pass=' . urlencode($password);
+                    $data .= '&dest=' . urlencode($smsto);
+                    $data .= '&orig=' . urlencode($smsfrom);
+                    $data .= '&msg=' . urlencode($smsmsg);
+                    $data .= '&validity=300&format=json';
+                    $url = $host . $path . $data;
+                    $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                    $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                    if ($verify_number->result == 200) {
+                        $sendSms = $this->getHelper()->voodoo($url);
+                        try {
+                            Mage::getModel('voodoo/voodoo')
+                                ->setOrderId($order->getIncrementId())
+                                ->setFrom($smsfrom)
+                                ->setTo($smsto)
+                                ->setSmsMessage($smsmsg)
+                                ->setStatus($sendSms['status'])
+                                ->setStatusMessage($sendSms['status_message'])
+                                ->setCreatedTime(now())
+                                ->save();
+                        } catch (Exception $e) {
                         }
                     }
                 }
@@ -172,6 +205,20 @@ class TGM_Voodoo_Model_Observer
                 if ($order->getState() !== $order->getOrigData('state') && $order->getOrigData('state') === Mage_Sales_Model_Order::STATE_HOLDED) {
                     if ($this->getHelper()->isOptinsEnabled()) {
                         $smsto = Mage::getSingleton('core/session')->getTGMVoodoo();
+                        if ($smsto == '') {
+                            $resource = Mage::getSingleton('core/resource');
+                            $readConnection = $resource->getConnection('core_read');
+                            $query = "SELECT sms_number FROM voodoo_number where order_id =" . $order->getIncrementId() . " LIMIT 1";
+                            $results = $readConnection->fetchRow($query);
+                            $smsto = $results['sms_number'];
+                            if ($smsto == '') {
+                                if ($this->getHelper()->isbillingorshipping() == 0) {
+                                    $smsto = $this->getHelper()->getTelephoneFromOrder($order);
+                                } else {
+                                    $smsto = $order->getShippingAddress()->getTelephone();
+                                }
+                            }
+                        }
                     } else {
                         if ($this->getHelper()->isbillingorshipping() == 0) {
                             $smsto = $this->getHelper()->getTelephoneFromOrder($order);
@@ -210,36 +257,46 @@ class TGM_Voodoo_Model_Observer
                             } catch (Exception $e) {
                             }
                         }
-                        if ($this->getHelper()->isOrdersUnholdNotify() and $this->getHelper()->getAdminUnholdTelephone()) {
-                            $smsto = $this->getHelper()->getAdminUnholdTelephone();
-                            $smsmsg = Mage::helper('voodoo')->__('%s has been placed on unhold', $order->getIncrementId());
-                            $data = '?uid=' . urlencode($username);
-                            $data .= '&pass=' . urlencode($password);
-                            $data .= '&dest=' . urlencode($smsto);
-                            $data .= '&orig=' . urlencode($smsfrom);
-                            $data .= '&msg=' . urlencode($smsmsg);
-                            $data .= '&validity=300&format=json';
-                            $url = $host . $path . $data;
-                            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
-                            $verify_number = $this->getHelper()->verify_number($verify_number_url);
-                            if ($verify_number->result == 200) {
-                                $sendSms = $this->getHelper()->voodoo($url);
-                                try {
-                                    Mage::getModel('voodoo/voodoo')
-                                        ->setOrderId($order->getIncrementId())
-                                        ->setFrom($smsfrom)
-                                        ->setTo($smsto)
-                                        ->setSmsMessage($smsmsg)
-                                        ->setStatus($sendSms['status'])
-                                        ->setStatusMessage($sendSms['status_message'])
-                                        ->setCreatedTime(now())
-                                        ->save();
-                                } catch (Exception $e) {
-                                }
-                            }
+                    }
+                }
+            }
+        }
+        if ($this->getHelper()->isOrdersUnholdNotify() and $this->getHelper()->getAdminUnholdTelephone()) {
+            $order = $observer->getOrder();
+            if ($order instanceof Mage_Sales_Model_Order) {
+                if ($order->getState() !== $order->getOrigData('state') && $order->getOrigData('state') === Mage_Sales_Model_Order::STATE_HOLDED) {
+                    $host = "http://www.voodoosms.com/";
+                    $path = "vapi/server/sendSMS";
+                    $username = $this->getHelper()->getUsername();
+                    $password = $this->getHelper()->getPassword();
+                    $smsfrom = $this->getHelper()->getSenderForOrderUnhold();
+                    $smsto = $this->getHelper()->getAdminUnholdTelephone();
+                    $smsmsg = Mage::helper('voodoo')->__('%s has been placed on unhold', $order->getIncrementId());
+                    $data = '?uid=' . urlencode($username);
+                    $data .= '&pass=' . urlencode($password);
+                    $data .= '&dest=' . urlencode($smsto);
+                    $data .= '&orig=' . urlencode($smsfrom);
+                    $data .= '&msg=' . urlencode($smsmsg);
+                    $data .= '&validity=300&format=json';
+                    $url = $host . $path . $data;
+
+                    $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                    $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                    if ($verify_number->result == 200) {
+                        $sendSms = $this->getHelper()->voodoo($url);
+                        try {
+                            Mage::getModel('voodoo/voodoo')
+                                ->setOrderId($order->getIncrementId())
+                                ->setFrom($smsfrom)
+                                ->setTo($smsto)
+                                ->setSmsMessage($smsmsg)
+                                ->setStatus($sendSms['status'])
+                                ->setStatusMessage($sendSms['status_message'])
+                                ->setCreatedTime(now())
+                                ->save();
+                        } catch (Exception $e) {
                         }
                     }
-
                 }
             }
         }
@@ -258,6 +315,20 @@ class TGM_Voodoo_Model_Observer
                 if ($order->getState() !== $order->getOrigData('state') && $order->getState() === Mage_Sales_Model_Order::STATE_CANCELED) {
                     if ($this->getHelper()->isOptinsEnabled()) {
                         $smsto = Mage::getSingleton('core/session')->getTGMVoodoo();
+                        if ($smsto == '') {
+                            $resource = Mage::getSingleton('core/resource');
+                            $readConnection = $resource->getConnection('core_read');
+                            $query = "SELECT sms_number FROM voodoo_number where order_id =" . $order->getIncrementId() . " LIMIT 1";
+                            $results = $readConnection->fetchRow($query);
+                            $smsto = $results['sms_number'];
+                            if ($smsto == '') {
+                                if ($this->getHelper()->isbillingorshipping() == 0) {
+                                    $smsto = $this->getHelper()->getTelephoneFromOrder($order);
+                                } else {
+                                    $smsto = $order->getShippingAddress()->getTelephone();
+                                }
+                            }
+                        }
                     } else {
                         if ($this->getHelper()->isbillingorshipping() == 0) {
                             $smsto = $this->getHelper()->getTelephoneFromOrder($order);
@@ -296,36 +367,45 @@ class TGM_Voodoo_Model_Observer
                             } catch (Exception $e) {
                             }
                         }
-                        if ($this->getHelper()->isOrdersCancelledNotify() and $this->getHelper()->getAdminCancelledTelephone()) {
-                            $smsto = $this->getHelper()->getAdminCancelledTelephone();
-                            $smsmsg = Mage::helper('voodoo')->__('%s has been placed cancelled', $order->getIncrementId());
-                            $data = '?uid=' . urlencode($username);
-                            $data .= '&pass=' . urlencode($password);
-                            $data .= '&dest=' . urlencode($smsto);
-                            $data .= '&orig=' . urlencode($smsfrom);
-                            $data .= '&msg=' . urlencode($smsmsg);
-                            $data .= '&validity=300&format=json&format=json';
-                            $url = $host . $path . $data;
-                            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
-                            $verify_number = $this->getHelper()->verify_number($verify_number_url);
-                            if ($verify_number->result == 200) {
-                                $sendSms = $this->getHelper()->voodoo($url);
-                                try {
-                                    Mage::getModel('voodoo/voodoo')
-                                        ->setOrderId($order->getIncrementId())
-                                        ->setFrom($smsfrom)
-                                        ->setTo($smsto)
-                                        ->setSmsMessage($smsmsg)
-                                        ->setStatus($sendSms['status'])
-                                        ->setStatusMessage($sendSms['status_message'])
-                                        ->setCreatedTime(now())
-                                        ->save();
-                                } catch (Exception $e) {
-                                }
-                            }
+                    }
+                }
+            }
+        }
+        if ($this->getHelper()->isOrdersCancelledNotify() and $this->getHelper()->getAdminCancelledTelephone()) {
+            $order = $observer->getOrder();
+            if ($order instanceof Mage_Sales_Model_Order) {
+                if ($order->getState() !== $order->getOrigData('state') && $order->getState() === Mage_Sales_Model_Order::STATE_CANCELED) {
+                    $host = "http://www.voodoosms.com/";
+                    $path = "vapi/server/sendSMS";
+                    $username = $this->getHelper()->getUsername();
+                    $password = $this->getHelper()->getPassword();
+                    $smsfrom = $this->getHelper()->getSenderForOrderCanceled();
+                    $smsto = $this->getHelper()->getAdminCancelledTelephone();
+                    $smsmsg = Mage::helper('voodoo')->__('%s has been placed cancelled', $order->getIncrementId());
+                    $data = '?uid=' . urlencode($username);
+                    $data .= '&pass=' . urlencode($password);
+                    $data .= '&dest=' . urlencode($smsto);
+                    $data .= '&orig=' . urlencode($smsfrom);
+                    $data .= '&msg=' . urlencode($smsmsg);
+                    $data .= '&validity=300&format=json&format=json';
+                    $url = $host . $path . $data;
+                    $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                    $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                    if ($verify_number->result == 200) {
+                        $sendSms = $this->getHelper()->voodoo($url);
+                        try {
+                            Mage::getModel('voodoo/voodoo')
+                                ->setOrderId($order->getIncrementId())
+                                ->setFrom($smsfrom)
+                                ->setTo($smsto)
+                                ->setSmsMessage($smsmsg)
+                                ->setStatus($sendSms['status'])
+                                ->setStatusMessage($sendSms['status_message'])
+                                ->setCreatedTime(now())
+                                ->save();
+                        } catch (Exception $e) {
                         }
                     }
-
                 }
             }
         }
@@ -340,6 +420,20 @@ class TGM_Voodoo_Model_Observer
             if ($order instanceof Mage_Sales_Model_Order) {
                 if ($this->getHelper()->isOptinsEnabled()) {
                     $smsto = Mage::getSingleton('core/session')->getTGMVoodoo();
+                    if ($smsto == '') {
+                        $resource = Mage::getSingleton('core/resource');
+                        $readConnection = $resource->getConnection('core_read');
+                        $query = "SELECT sms_number FROM voodoo_number where order_id =" . $order->getIncrementId() . " LIMIT 1";
+                        $results = $readConnection->fetchRow($query);
+                        $smsto = $results['sms_number'];
+                        if ($smsto == '') {
+                            if ($this->getHelper()->isbillingorshipping() == 0) {
+                                $smsto = $this->getHelper()->getTelephoneFromOrder($order);
+                            } else {
+                                $smsto = $order->getShippingAddress()->getTelephone();
+                            }
+                        }
+                    }
                 } else {
                     if ($this->getHelper()->isbillingorshipping() == 0) {
                         $smsto = $this->getHelper()->getTelephoneFromOrder($order);
@@ -378,41 +472,51 @@ class TGM_Voodoo_Model_Observer
                         } catch (Exception $e) {
                         }
                     }
-                    if ($this->getHelper()->isOrdersShipmentsNotify() and $this->getHelper()->getAdminShipmentsTelephone()) {
-                        $smsto = $this->getHelper()->getAdminTelephone();
-                        $smsmsg = Mage::helper('voodoo')->__('%s is on shipment state', $order->getIncrementId());
-                        $data = '?uid=' . urlencode($username);
-                        $data .= '&pass=' . urlencode($password);
-                        $data .= '&dest=' . urlencode($smsto);
-                        $data .= '&orig=' . urlencode($smsfrom);
-                        $data .= '&msg=' . urlencode($smsmsg);
-                        $data .= '&validity=300&format=json';
-                        $url = $host . $path . $data;
-                        $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
-                        $verify_number = $this->getHelper()->verify_number($verify_number_url);
-                        if ($verify_number->result == 200) {
-                            $sendSms = $this->getHelper()->voodoo($url);
-                            try {
-                                Mage::getModel('voodoo/voodoo')
-                                    ->setOrderId($order->getIncrementId())
-                                    ->setFrom($smsfrom)
-                                    ->setTo($smsto)
-                                    ->setSmsMessage($smsmsg)
-                                    ->setStatus($sendSms['status'])
-                                    ->setStatusMessage($sendSms['status_message'])
-                                    ->setCreatedTime(now())
-                                    ->save();
-                            } catch (Exception $e) {
-                            }
-                        }
+                }
+            }
+        }
+        if ($this->getHelper()->isOrdersShipmentsNotify() and $this->getHelper()->getAdminShipmentsTelephone()) {
+            $shipment = $observer->getEvent()->getShipment();
+            $order = $shipment->getOrder();
+            if ($order instanceof Mage_Sales_Model_Order) {
+                $host = "http://www.voodoosms.com/";
+                $path = "vapi/server/sendSMS";
+                $username = $this->getHelper()->getUsername();
+                $password = $this->getHelper()->getPassword();
+                $smsfrom = $this->getHelper()->getSenderForShipment();
+                $smsto = $this->getHelper()->getAdminTelephone();
+                $smsmsg = Mage::helper('voodoo')->__('%s is on shipment state', $order->getIncrementId());
+                $data = '?uid=' . urlencode($username);
+                $data .= '&pass=' . urlencode($password);
+                $data .= '&dest=' . urlencode($smsto);
+                $data .= '&orig=' . urlencode($smsfrom);
+                $data .= '&msg=' . urlencode($smsmsg);
+                $data .= '&validity=300&format=json';
+                $url = $host . $path . $data;
+                $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                if ($verify_number->result == 200) {
+                    $sendSms = $this->getHelper()->voodoo($url);
+                    try {
+                        Mage::getModel('voodoo/voodoo')
+                            ->setOrderId($order->getIncrementId())
+                            ->setFrom($smsfrom)
+                            ->setTo($smsto)
+                            ->setSmsMessage($smsmsg)
+                            ->setStatus($sendSms['status'])
+                            ->setStatusMessage($sendSms['status_message'])
+                            ->setCreatedTime(now())
+                            ->save();
+                    } catch (Exception $e) {
                     }
                 }
-
             }
         }
     }
 
-    public function sendSmsOnM2EOrderCreatedAuto(Varien_Event_Observer $observer){
+
+    public function sendSmsOnM2EOrderCreatedAuto(Varien_Event_Observer $observer)
+    {
         $order = $observer->getOrder();
         $data['ebay_order_id'] = $order->getData('ebay_order_id');
         $data['buyer_email'] = $order->getData('buyer_email');
@@ -485,7 +589,8 @@ class TGM_Voodoo_Model_Observer
         }
     }
 
-    public function sendSmsOnM2EOrderCreated($order){
+    public function sendSmsOnM2EOrderCreated($order)
+    {
         $data['ebay_order_id'] = $order->getData('ebay_order_id');
         $data['buyer_email'] = $order->getData('buyer_email');
         $data['buyer_name'] = $order->getData('buyer_name');
@@ -557,7 +662,8 @@ class TGM_Voodoo_Model_Observer
         }
     }
 
-    public function sendSmsOnM2EShipmentCreated($order){
+    public function sendSmsOnM2EShipmentCreated($order)
+    {
 
         $data['ebay_order_id'] = $order->getData('ebay_order_id');
         $data['buyer_email'] = $order->getData('buyer_email');
@@ -632,7 +738,8 @@ class TGM_Voodoo_Model_Observer
     }
 
 
-    public function sendSmsOnM2EPaymentCreated($order){
+    public function sendSmsOnM2EPaymentCreated($order)
+    {
 
         $data['ebay_order_id'] = $order->getData('ebay_order_id');
         $data['buyer_email'] = $order->getData('buyer_email');
@@ -684,7 +791,7 @@ class TGM_Voodoo_Model_Observer
                 $data .= '&msg=' . urlencode($smsmsg);
                 $data .= '&validity=300&format=json';
                 $url = $host . $path . $data;
-            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
                 $verify_number = $this->getHelper()->verify_number($verify_number_url);
                 if ($verify_number->result == 200) {
                     $sendSms = $this->getHelper()->voodoo($url);
@@ -704,10 +811,12 @@ class TGM_Voodoo_Model_Observer
             }
         }
     }
+
     /**
      * Event Hook: checkout_type_onepage_save_order
      *
      * @author Ammar
+     *
      * @param $observer Varien_Event_Observer
      */
     public function hookToOrderSaveEvent()
@@ -734,7 +843,7 @@ class TGM_Voodoo_Model_Observer
                 . "(:order_id, :sms_number)";
 
             $binds = array(
-                'order_id' => $incrementId,
+                'order_id'   => $incrementId,
                 'sms_number' => $_voodoo_data,
             );
             $write->query($query, $binds);

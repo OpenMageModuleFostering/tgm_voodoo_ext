@@ -373,6 +373,30 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/receiver');
     }
 
+    public function getSendTestNumberOrderPlaced()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'orders/oplctest');
+    }
+    public function getMessageForTestOrderPlaced(){
+        return Mage::getStoreConfig(self::CONFIG_PATH.'orders/message');
+    }
+    public function getSendTestNumberOrderHold()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'order_hold/ohldtest');
+    }
+    public function getSendTestNumberOrderUnHold()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'order_unhold/ounhldtest');
+    }
+    public function getSendTestNumberOrderCanceled()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'order_canceled/ocnldtest');
+    }
+    public function getSendTestNumberOrderShipped()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'shipments/oshptest');
+    }
+
 
 
     public function voodoo($url) {
@@ -408,7 +432,7 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
 	public function file_get_contents_curl($url) {
-		$ch = curl_init();
+        $ch = curl_init();
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_URL, $url);
