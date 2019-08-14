@@ -157,7 +157,7 @@
 						<message translate="label comment">
                             <label>Enter the Message</label>
                             <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incur multiple credit charges)</comment>
-                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-918</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
 							<sort_order>15</sort_order>
@@ -222,7 +222,7 @@
 						<message translate="label comment">
                             <label>Enter the Message</label>
                             <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incur multiple credit charges)</comment>
-                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-918</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
 							<sort_order>15</sort_order>
@@ -287,7 +287,7 @@
 						<message translate="label comment">
                             <label>Enter the Message</label>
 							<comment>Your Message Content, (Max 918 characters. Text over 160 characters may incur multiple credit charges)</comment>
-                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-918</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
 							<sort_order>15</sort_order>
@@ -352,7 +352,7 @@
 						<message translate="label comment">
                             <label>Enter the Message</label>
                             <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incur multiple credit charges)</comment>
-                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-918</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
 							<sort_order>15</sort_order>
@@ -417,7 +417,7 @@
 						<message translate="label comment">
                             <label>Enter the Message</label>
                             <comment>Your Message Content, (Max 918 characters. Text over 160 characters may incur multiple credit charges)</comment>
-                            <validate>required-entry validate-length minimum-length-1 maximum-length-160</validate>
+                            <validate>required-entry validate-length minimum-length-1 maximum-length-918</validate>
                             <tooltip>Enter your default message. You can use {{firstname}} for Firstname, {{middlename}} for Middlename, {{lastname}} for Lastname, {{fax}} for Fax, {{postal}} for Post Code, {{city}} for City, {{email}} for EmailAddress and {{order_id}} for Order Number.</tooltip>
 							<frontend_type>textarea</frontend_type>
 							<sort_order>15</sort_order>
