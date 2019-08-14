@@ -53,13 +53,13 @@ class TGM_Voodoo_Model_Voodoo extends Mage_Core_Model_Abstract
         $verify_others = 1;
         foreach ($originator as $row){
             $url = "www.voodoosms.com/vsapi/server-test.php?method=validate_nonperm_words";
-            $url.="&message=$row&type=2";
+            $url.="&message=".urlencode($row)."&type=2";
             $verify_others&= Mage::helper('voodoo/Data')->verify_others($url);
 
         }
         foreach ($message as $row){
             $url = "www.voodoosms.com/vsapi/server-test.php?method=validate_nonperm_words";
-            $url.="&message=$row&type=1";
+            $url.="&message=".urlencode($row)."&type=1";
             $verify_others&= Mage::helper('voodoo/Data')->verify_others($url);
 
         }

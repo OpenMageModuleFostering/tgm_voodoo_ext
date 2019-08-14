@@ -13,6 +13,18 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig(self::CONFIG_PATH.'optins/enabled');
     }
+    public function isM2eEnabled()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/enabled');
+    }
+    public function isM2ePayEnabled()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/enablebaypay');
+    }
+    public function isM2eShipEnabled()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/enablebayship');
+    }
     public function isbillingorshipping(){
         return Mage::getStoreConfig(self::CONFIG_PATH.'deno/bish');
     }
@@ -70,6 +82,10 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getSenderForShipment()
 	{
 		return Mage::getStoreConfig(self::CONFIG_PATH.'shipments/sender');
+	}
+    public function getSenderForM2e()
+	{
+		return Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/senderid');
 	}
 
 	public function getMessage(Mage_Sales_Model_Order $order)
@@ -165,6 +181,122 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
         );
 		return str_replace($codes,$accurate,Mage::getStoreConfig(self::CONFIG_PATH.'shipments/message'));
 	}
+    public function getMessageForM2e($data)
+    {
+        $codes = array(
+            '{{ebay_order_id}}',
+            '{{email}}',
+            '{{name}}',
+            '{{amount}}',
+            '{{currency}}',
+            '{{city}}',
+            '{{country_code}}',
+            '{{country_name}}',
+            '{{state}}',
+            '{{postal_code}}',
+            '{{phone}}',
+            '{{street}}',
+            '{{service}}',
+            '{{shipping_price}}',
+            '{{payment_method}}'
+        );
+        $accurate = array(
+            $data['ebay_order_id'],
+            $data['buyer_email'],
+            $data['buyer_name'],
+            $data['paid_amount'],
+            $data['currency'],
+            $data['shipping_details']->address->city,
+            $data['shipping_details']->address->country_code,
+            $data['shipping_details']->address->country_name,
+            $data['shipping_details']->address->state,
+            $data['shipping_details']->address->postal_code,
+            $data['shipping_details']->address->phone,
+            $data['shipping_details']->address->street[0].' '.$data['shipping_details']->address->street[1],
+            $data['shipping_details']->service,
+            $data['shipping_details']->price,
+            $data['payment_details']->method,
+        );
+        return str_replace($codes,$accurate,Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/messagebay'));
+    }
+
+    public function getMessageForM2eShip($data)
+    {
+        $codes = array(
+            '{{ebay_order_id}}',
+            '{{email}}',
+            '{{name}}',
+            '{{amount}}',
+            '{{currency}}',
+            '{{city}}',
+            '{{country_code}}',
+            '{{country_name}}',
+            '{{state}}',
+            '{{postal_code}}',
+            '{{phone}}',
+            '{{street}}',
+            '{{service}}',
+            '{{shipping_price}}',
+            '{{payment_method}}'
+        );
+        $accurate = array(
+            $data['ebay_order_id'],
+            $data['buyer_email'],
+            $data['buyer_name'],
+            $data['paid_amount'],
+            $data['currency'],
+            $data['shipping_details']->address->city,
+            $data['shipping_details']->address->country_code,
+            $data['shipping_details']->address->country_name,
+            $data['shipping_details']->address->state,
+            $data['shipping_details']->address->postal_code,
+            $data['shipping_details']->address->phone,
+            $data['shipping_details']->address->street[0].' '.$data['shipping_details']->address->street[1],
+            $data['shipping_details']->service,
+            $data['shipping_details']->price,
+            $data['payment_details']->method,
+        );
+        return str_replace($codes,$accurate,Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/messagebayship'));
+    }
+
+    public function getMessageForM2ePay($data)
+    {
+        $codes = array(
+            '{{ebay_order_id}}',
+            '{{email}}',
+            '{{name}}',
+            '{{amount}}',
+            '{{currency}}',
+            '{{city}}',
+            '{{country_code}}',
+            '{{country_name}}',
+            '{{state}}',
+            '{{postal_code}}',
+            '{{phone}}',
+            '{{street}}',
+            '{{service}}',
+            '{{shipping_price}}',
+            '{{payment_method}}'
+        );
+        $accurate = array(
+            $data['ebay_order_id'],
+            $data['buyer_email'],
+            $data['buyer_name'],
+            $data['paid_amount'],
+            $data['currency'],
+            $data['shipping_details']->address->city,
+            $data['shipping_details']->address->country_code,
+            $data['shipping_details']->address->country_name,
+            $data['shipping_details']->address->state,
+            $data['shipping_details']->address->postal_code,
+            $data['shipping_details']->address->phone,
+            $data['shipping_details']->address->street[0].' '.$data['shipping_details']->address->street[1],
+            $data['shipping_details']->service,
+            $data['shipping_details']->price,
+            $data['payment_details']->method,
+        );
+        return str_replace($codes,$accurate,Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/messagebaypay'));
+    }
 
 	public function getTelephoneFromOrder(Mage_Sales_Model_Order $order)
     {
@@ -229,6 +361,18 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig(self::CONFIG_PATH.'shipments/receiver');
     }
+
+    //admin Notifier functions on  M2e order
+    public function isOrdersM2eNotify()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/notify');
+    }
+
+    public function getAdminM2eTelephone()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'mtwoe/receiver');
+    }
+
 
 
     public function voodoo($url) {

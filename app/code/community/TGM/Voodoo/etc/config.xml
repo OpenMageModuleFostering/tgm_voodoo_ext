@@ -10,7 +10,7 @@
 <config>
     <modules>
         <TGM_Voodoo>
-            <version>3.2.2</version>
+            <version>3.3.8</version>
         </TGM_Voodoo>
     </modules>
     <admin>
@@ -177,7 +177,7 @@
                     </TGM_Voodoo_Created>
                 </observers>
             </checkout_onepage_controller_success_action>
-			<sales_order_save_after>
+            <sales_order_save_after>
 				<observers>
                     <TGM_Voodoo_Order_Hold>
 						<type>singleton</type>
@@ -205,6 +205,15 @@
                     </TGM_Voodoo_Shipment_Created>
                 </observers>
             </sales_order_shipment_save_after>
+            <m2epro_order_place_success>
+                <observers>
+                    <TGM_Voodoo_Created>
+                        <type>singleton</type>
+                        <class>TGM_Voodoo_Model_Observer</class>
+                        <method>sendSmsOnM2EOrderCreatedAuto</method>
+                    </TGM_Voodoo_Created>
+                </observers>
+            </m2epro_order_place_success>
 		</events>
     </global>
 	<default>
@@ -268,9 +277,6 @@
                 </observers>
             </checkout_onepage_controller_success_action>
             <!-- END Custom added by Branko Ajzele: Hooks into order save event -->
-
-
-
 
         </events>
 

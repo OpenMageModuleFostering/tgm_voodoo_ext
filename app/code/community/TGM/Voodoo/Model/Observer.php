@@ -333,6 +333,7 @@ class TGM_Voodoo_Model_Observer
 
     public function sendSmsOnShipmentCreated(Varien_Event_Observer $observer)
     {
+        $shipment = $observer->getEvent();
         if ($this->getHelper()->isShipmentsEnabled()) {
             $shipment = $observer->getEvent()->getShipment();
             $order = $shipment->getOrder();
@@ -411,6 +412,298 @@ class TGM_Voodoo_Model_Observer
         }
     }
 
+    public function sendSmsOnM2EOrderCreatedAuto(Varien_Event_Observer $observer){
+        $order = $observer->getOrder();
+        $data['ebay_order_id'] = $order->getData('ebay_order_id');
+        $data['buyer_email'] = $order->getData('buyer_email');
+        $data['buyer_name'] = $order->getData('buyer_name');
+        $data['paid_amount'] = $order->getData('paid_amount');
+        $data['currency'] = $order->getData('currency');
+        $data['shipping_details'] = json_decode($order->getData('shipping_details'));
+        $data['payment_details'] = json_decode($order->getData('payment_details'));
+        $smsto = str_replace(' ', '', $data['shipping_details']->address->phone);
+        //echo '<pre>';print_r($data);echo '</pre>';die('ob_pay');
+        if ($this->getHelper()->isM2eEnabled()) {
+            $host = "http://www.voodoosms.com/";
+            $path = "vapi/server/sendSMS";
+            $username = $this->getHelper()->getUsername();
+            $password = $this->getHelper()->getPassword();
+            $smsfrom = $this->getHelper()->getSenderForM2e();
+            $smsmsg = $this->getHelper()->getMessageForM2eShip($data);
+            $data = '?uid=' . urlencode($username);
+            $data .= '&pass=' . urlencode($password);
+            $data .= '&dest=' . urlencode($smsto);
+            $data .= '&orig=' . urlencode($smsfrom);
+            $data .= '&msg=' . urlencode($smsmsg);
+            $data .= '&validity=300&format=json';
+            $url = $host . $path . $data;
+            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+            $verify_number = $this->getHelper()->verify_number($verify_number_url);
+            if ($verify_number->result == 200) {
+                $sendSms = $this->getHelper()->voodoo($url);
+                try {
+                    Mage::getModel('voodoo/voodoo')
+                        ->setOrderId($order->getIncrementId())
+                        ->setFrom($smsfrom)
+                        ->setTo($smsto)
+                        ->setSmsMessage($smsmsg)
+                        ->setStatus($sendSms['status'])
+                        ->setStatusMessage($sendSms['status_message'])
+                        ->setCreatedTime(now())
+                        ->save();
+                } catch (Exception $e) {
+                }
+            }
+            if ($this->getHelper()->isOrdersM2eNotify() and $this->getHelper()->getAdminM2eTelephone()) {
+                $smsto = $this->getHelper()->getAdminM2eTelephone();
+                $smsmsg = Mage::helper('voodoo')->__('A new m2e order # %s is placed', $data['ebay_order_id']);
+                $data = '?uid=' . urlencode($username);
+                $data .= '&pass=' . urlencode($password);
+                $data .= '&dest=' . urlencode($smsto);
+                $data .= '&orig=' . urlencode($smsfrom);
+                $data .= '&msg=' . urlencode($smsmsg);
+                $data .= '&validity=300&format=json';
+                $url = $host . $path . $data;
+                $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                if ($verify_number->result == 200) {
+                    $sendSms = $this->getHelper()->voodoo($url);
+                    try {
+                        Mage::getModel('voodoo/voodoo')
+                            ->setOrderId($order->getIncrementId())
+                            ->setFrom($smsfrom)
+                            ->setTo($smsto)
+                            ->setSmsMessage($smsmsg)
+                            ->setStatus($sendSms['status'])
+                            ->setStatusMessage($sendSms['status_message'])
+                            ->setCreatedTime(now())
+                            ->save();
+                    } catch (Exception $e) {
+                    }
+                }
+            }
+        }
+    }
+
+    public function sendSmsOnM2EOrderCreated($order){
+        $data['ebay_order_id'] = $order->getData('ebay_order_id');
+        $data['buyer_email'] = $order->getData('buyer_email');
+        $data['buyer_name'] = $order->getData('buyer_name');
+        $data['paid_amount'] = $order->getData('paid_amount');
+        $data['currency'] = $order->getData('currency');
+        $data['shipping_details'] = json_decode($order->getData('shipping_details'));
+        $data['payment_details'] = json_decode($order->getData('payment_details'));
+        $smsto = str_replace(' ', '', $data['shipping_details']->address->phone);
+        //echo '<pre>';print_r($data);echo '</pre>';die('ob_pay');
+        if ($this->getHelper()->isM2eEnabled()) {
+            $host = "http://www.voodoosms.com/";
+            $path = "vapi/server/sendSMS";
+            $username = $this->getHelper()->getUsername();
+            $password = $this->getHelper()->getPassword();
+            $smsfrom = $this->getHelper()->getSenderForM2e();
+            $smsmsg = $this->getHelper()->getMessageForM2eShip($data);
+            $data = '?uid=' . urlencode($username);
+            $data .= '&pass=' . urlencode($password);
+            $data .= '&dest=' . urlencode($smsto);
+            $data .= '&orig=' . urlencode($smsfrom);
+            $data .= '&msg=' . urlencode($smsmsg);
+            $data .= '&validity=300&format=json';
+            $url = $host . $path . $data;
+            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+            $verify_number = $this->getHelper()->verify_number($verify_number_url);
+            if ($verify_number->result == 200) {
+                $sendSms = $this->getHelper()->voodoo($url);
+                try {
+                    Mage::getModel('voodoo/voodoo')
+                        ->setOrderId($order->getIncrementId())
+                        ->setFrom($smsfrom)
+                        ->setTo($smsto)
+                        ->setSmsMessage($smsmsg)
+                        ->setStatus($sendSms['status'])
+                        ->setStatusMessage($sendSms['status_message'])
+                        ->setCreatedTime(now())
+                        ->save();
+                } catch (Exception $e) {
+                }
+            }
+            if ($this->getHelper()->isOrdersM2eNotify() and $this->getHelper()->getAdminM2eTelephone()) {
+                $smsto = $this->getHelper()->getAdminM2eTelephone();
+                $smsmsg = Mage::helper('voodoo')->__('A new m2e order # %s is placed', $data['ebay_order_id']);
+                $data = '?uid=' . urlencode($username);
+                $data .= '&pass=' . urlencode($password);
+                $data .= '&dest=' . urlencode($smsto);
+                $data .= '&orig=' . urlencode($smsfrom);
+                $data .= '&msg=' . urlencode($smsmsg);
+                $data .= '&validity=300&format=json';
+                $url = $host . $path . $data;
+                $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                if ($verify_number->result == 200) {
+                    $sendSms = $this->getHelper()->voodoo($url);
+                    try {
+                        Mage::getModel('voodoo/voodoo')
+                            ->setOrderId($order->getIncrementId())
+                            ->setFrom($smsfrom)
+                            ->setTo($smsto)
+                            ->setSmsMessage($smsmsg)
+                            ->setStatus($sendSms['status'])
+                            ->setStatusMessage($sendSms['status_message'])
+                            ->setCreatedTime(now())
+                            ->save();
+                    } catch (Exception $e) {
+                    }
+                }
+            }
+        }
+    }
+
+    public function sendSmsOnM2EShipmentCreated($order){
+
+        $data['ebay_order_id'] = $order->getData('ebay_order_id');
+        $data['buyer_email'] = $order->getData('buyer_email');
+        $data['buyer_name'] = $order->getData('buyer_name');
+        $data['paid_amount'] = $order->getData('paid_amount');
+        $data['currency'] = $order->getData('currency');
+        $data['shipping_details'] = json_decode($order->getData('shipping_details'));
+        $data['payment_details'] = json_decode($order->getData('payment_details'));
+        $smsto = str_replace(' ', '', $data['shipping_details']->address->phone);
+        //echo '<pre>';print_r($data);echo '</pre>';die('ob_pay');
+        if ($this->getHelper()->isM2eEnabled() && $this->getHelper()->isM2eShipEnabled()) {
+            $host = "http://www.voodoosms.com/";
+            $path = "vapi/server/sendSMS";
+            $username = $this->getHelper()->getUsername();
+            $password = $this->getHelper()->getPassword();
+            $smsfrom = $this->getHelper()->getSenderForM2e();
+            $smsmsg = $this->getHelper()->getMessageForM2eShip($data);
+            $data = '?uid=' . urlencode($username);
+            $data .= '&pass=' . urlencode($password);
+            $data .= '&dest=' . urlencode($smsto);
+            $data .= '&orig=' . urlencode($smsfrom);
+            $data .= '&msg=' . urlencode($smsmsg);
+            $data .= '&validity=300&format=json';
+            $url = $host . $path . $data;
+            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+            $verify_number = $this->getHelper()->verify_number($verify_number_url);
+            if ($verify_number->result == 200) {
+                $sendSms = $this->getHelper()->voodoo($url);
+                try {
+                    Mage::getModel('voodoo/voodoo')
+                        ->setOrderId($order->getIncrementId())
+                        ->setFrom($smsfrom)
+                        ->setTo($smsto)
+                        ->setSmsMessage($smsmsg)
+                        ->setStatus($sendSms['status'])
+                        ->setStatusMessage($sendSms['status_message'])
+                        ->setCreatedTime(now())
+                        ->save();
+                } catch (Exception $e) {
+                }
+            }
+            if ($this->getHelper()->isOrdersM2eNotify() and $this->getHelper()->getAdminM2eTelephone()) {
+                $smsto = $this->getHelper()->getAdminM2eTelephone();
+                $smsmsg = Mage::helper('voodoo')->__('m2e order # %s is now Shipped', $data['ebay_order_id']);
+                $data = '?uid=' . urlencode($username);
+                $data .= '&pass=' . urlencode($password);
+                $data .= '&dest=' . urlencode($smsto);
+                $data .= '&orig=' . urlencode($smsfrom);
+                $data .= '&msg=' . urlencode($smsmsg);
+                $data .= '&validity=300&format=json';
+                $url = $host . $path . $data;
+                $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                $verify_number = $this->getHelper()->verify_number($verify_number_url);
+
+                if ($verify_number->result == 200) {
+                    $sendSms = $this->getHelper()->voodoo($url);
+                    try {
+                        Mage::getModel('voodoo/voodoo')
+                            ->setOrderId($order->getIncrementId())
+                            ->setFrom($smsfrom)
+                            ->setTo($smsto)
+                            ->setSmsMessage($smsmsg)
+                            ->setStatus($sendSms['status'])
+                            ->setStatusMessage($sendSms['status_message'])
+                            ->setCreatedTime(now())
+                            ->save();
+                    } catch (Exception $e) {
+                    }
+                }
+            }
+        }
+    }
+
+
+    public function sendSmsOnM2EPaymentCreated($order){
+
+        $data['ebay_order_id'] = $order->getData('ebay_order_id');
+        $data['buyer_email'] = $order->getData('buyer_email');
+        $data['buyer_name'] = $order->getData('buyer_name');
+        $data['paid_amount'] = $order->getData('paid_amount');
+        $data['currency'] = $order->getData('currency');
+        $data['shipping_details'] = json_decode($order->getData('shipping_details'));
+        $data['payment_details'] = json_decode($order->getData('payment_details'));
+        $smsto = str_replace(' ', '', $data['shipping_details']->address->phone);
+        //echo '<pre>';print_r($data);echo '</pre>';die('ob_pay');
+        if ($this->getHelper()->isM2eEnabled() && $this->getHelper()->isM2ePayEnabled()) {
+            $host = "http://www.voodoosms.com/";
+            $path = "vapi/server/sendSMS";
+            $username = $this->getHelper()->getUsername();
+            $password = $this->getHelper()->getPassword();
+            $smsfrom = $this->getHelper()->getSenderForM2e();
+            $smsmsg = $this->getHelper()->getMessageForM2ePay($data);
+            $data = '?uid=' . urlencode($username);
+            $data .= '&pass=' . urlencode($password);
+            $data .= '&dest=' . urlencode($smsto);
+            $data .= '&orig=' . urlencode($smsfrom);
+            $data .= '&msg=' . urlencode($smsmsg);
+            $data .= '&validity=300&format=json';
+            $url = $host . $path . $data;
+            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+            $verify_number = $this->getHelper()->verify_number($verify_number_url);
+            if ($verify_number->result == 200) {
+                $sendSms = $this->getHelper()->voodoo($url);
+                try {
+                    Mage::getModel('voodoo/voodoo')
+                        ->setOrderId($order->getIncrementId())
+                        ->setFrom($smsfrom)
+                        ->setTo($smsto)
+                        ->setSmsMessage($smsmsg)
+                        ->setStatus($sendSms['status'])
+                        ->setStatusMessage($sendSms['status_message'])
+                        ->setCreatedTime(now())
+                        ->save();
+                } catch (Exception $e) {
+                }
+            }
+            if ($this->getHelper()->isOrdersM2eNotify() and $this->getHelper()->getAdminM2eTelephone()) {
+                $smsto = $this->getHelper()->getAdminM2eTelephone();
+                $smsmsg = Mage::helper('voodoo')->__('m2e order # %s is paid', $data['ebay_order_id']);
+                $data = '?uid=' . urlencode($username);
+                $data .= '&pass=' . urlencode($password);
+                $data .= '&dest=' . urlencode($smsto);
+                $data .= '&orig=' . urlencode($smsfrom);
+                $data .= '&msg=' . urlencode($smsmsg);
+                $data .= '&validity=300&format=json';
+                $url = $host . $path . $data;
+            $verify_number_url = "http://voodoosms.com/vapi/server/checkRanges?uid=" . urlencode($username) . "&pass=" . urlencode($password) . "&dest=" . urlencode($smsto) . "&format=json";
+                $verify_number = $this->getHelper()->verify_number($verify_number_url);
+                if ($verify_number->result == 200) {
+                    $sendSms = $this->getHelper()->voodoo($url);
+                    try {
+                        Mage::getModel('voodoo/voodoo')
+                            ->setOrderId($order->getIncrementId())
+                            ->setFrom($smsfrom)
+                            ->setTo($smsto)
+                            ->setSmsMessage($smsmsg)
+                            ->setStatus($sendSms['status'])
+                            ->setStatusMessage($sendSms['status_message'])
+                            ->setCreatedTime(now())
+                            ->save();
+                    } catch (Exception $e) {
+                    }
+                }
+            }
+        }
+    }
     /**
      * Event Hook: checkout_type_onepage_save_order
      *

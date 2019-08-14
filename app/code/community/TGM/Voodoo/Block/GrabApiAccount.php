@@ -4,7 +4,7 @@ class TGM_Voodoo_Block_GrabApiAccount extends Mage_Adminhtml_Block_System_Config
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
         $this->setElement($element);
-        $url = 'http://www.voodoosms.com/portal/broadcast/api';
+        $url = 'https://www.voodoosms.com/portal/broadcast/api';
         $html = $this->getLayout()->createBlock('adminhtml/widget_button')
             ->setType('button')
             ->setClass('button')
