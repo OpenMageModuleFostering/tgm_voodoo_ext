@@ -85,10 +85,50 @@
                         </credits>
 					</fields>
 				</enter>
+                <optins translate="label">
+                    <label>Customer SMS Opt-In</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>15</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Allow Opt-In Feature</label>
+                            <comment>If YES, then during checkout the customer will be asked if they want to receive SMS Notification and which number to send them to. If NO, the default rules apply.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                    </fields>
+                </optins>
+                <deno translate="label">
+                    <label>Default Number (Used when OPT-in is set to NO)</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <bish translate="label comment">
+                            <label>Use Shipping or Billing Contact Details</label>
+                            <comment>During checkout, if Opt-In is set to NO, select which number should be used to send the SMS notifications configured in this module to.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>TGM_Voodoo_Model_Adminhtml_System_Config_Source_Color</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bish>
+                    </fields>
+                </deno>
 				<orders translate="label">
 					<label>When new order is placed</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>15</sort_order>
+					<sort_order>25</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -153,7 +193,7 @@
 				<order_hold translate="label">
 					<label>When Order Status is set to Hold</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>20</sort_order>
+					<sort_order>30</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -195,7 +235,7 @@
                             <comment>This option will send sms to the admin when an order is placed</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>20</sort_order>
+                            <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -218,7 +258,7 @@
 				<order_unhold translate="label">
 					<label>When Order Status is set to Unhold</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>25</sort_order>
+					<sort_order>35</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -283,7 +323,7 @@
 				<order_canceled translate="label">
 					<label>When Order is Cancelled</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>30</sort_order>
+					<sort_order>40</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -348,7 +388,7 @@
 				<shipments translate="label">
 					<label>When Order is set for shipment</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>35</sort_order>
+					<sort_order>45</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -420,5 +460,26 @@
 			</groups>
 
 		</voodoo>
+        <design>
+            <groups>
+                <admin translate="label">
+                    <label>Admin Theme</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>
+                        <theme translate="label comment">
+                            <label>Admin theme name</label>
+                            <comment>Override default admin theme.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </theme>
+                    </fields>
+                </admin>
+            </groups>
+        </design>
+
     </sections>
+
 </config>

@@ -10,7 +10,7 @@
 <config>
     <modules>
         <TGM_Voodoo>
-            <version>1.0.0</version>
+            <version>2.3.7</version>
         </TGM_Voodoo>
     </modules>
     <admin>
@@ -102,11 +102,20 @@
                     </voodoo>
                 </entities>
             </voodoo_mysql4>
+            <checkout>
+                <rewrite>
+                    <type_onepage>TGM_Voodoo_Model_Type_Onepage</type_onepage>
+                </rewrite>
+            </checkout>
+            <tgmadminthemecontroller>
+                <class>TGM_Voodoo_Controller</class>
+            </tgmadminthemecontroller>
         </models>
         <resources>
             <voodoo_setup>
                 <setup>
                     <module>TGM_Voodoo</module>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -127,6 +136,19 @@
             <voodoo>
                 <class>TGM_Voodoo_Block</class>
             </voodoo>
+            <checkout>
+                <rewrite>
+                    <onepage>TGM_Voodoo_Block_Onepage</onepage>
+                </rewrite>
+            </checkout>
+
+            <voodoo>
+                <class>TGM_Voodoo_Block</class>
+            </voodoo>
+
+            <voodooonepage>
+                <class>TGM_Voodoo_Block_Onepage</class>
+            </voodooonepage>
         </blocks>
         <helpers>
             <voodoo>
@@ -134,7 +156,19 @@
             </voodoo>
         </helpers>
 		<events>
-			<checkout_onepage_controller_success_action>
+            <!-- START Adds the Admin theme switcher, enables to avoid modify admin themes -->
+            <adminhtml_controller_action_predispatch_start>
+                <observers>
+                    <tgm_themeoverride_observer>
+                        <type>singleton</type>
+                        <!-- tgmadminthemecontroller/observer  -->
+                        <class>TGM_Voodoo_Controller_Observer</class>
+                        <method>overrideTheme</method>
+                    </tgm_themeoverride_observer>
+                </observers>
+            </adminhtml_controller_action_predispatch_start>
+            <!-- END Adds the Admin theme switcher, enables to avoid modify admin themes -->
+            <checkout_onepage_controller_success_action>
                 <observers>
                     <TGM_Voodoo_Created>
 						<type>singleton</type>
@@ -203,4 +237,50 @@
 			</shipments>
 		</voodoo>
 	</default>
+    <frontend>
+        <routers>
+            <tgm_voodoo>
+                <use>standard</use>
+                <args>
+                    <module>TGM_Voodoo</module>
+                    <frontName>Voodoo</frontName>
+                </args>
+            </tgm_voodoo>
+            <checkout>
+                <args>
+                    <modules>
+                        <TGM_Voodoo before="Mage_Checkout">TGM_Voodoo</TGM_Voodoo>
+                    </modules>
+                </args>
+            </checkout>
+
+        </routers>
+
+        <events>
+            <!-- START Custom added by Branko Ajzele: Hooks into order save event -->
+            <checkout_onepage_controller_success_action>
+                <observers>
+                    <hooksystem_order_success>
+                        <type>singleton</type>
+                        <class>voodoo/observer</class>
+                        <method>hookToOrderSaveEvent</method>
+                    </hooksystem_order_success>
+                </observers>
+            </checkout_onepage_controller_success_action>
+            <!-- END Custom added by Branko Ajzele: Hooks into order save event -->
+
+
+
+
+        </events>
+
+        <layout>
+            <updates>
+                <voodoo>
+                    <file>voodoo.xml</file>
+                </voodoo>
+            </updates>
+        </layout>
+
+    </frontend>
 </config>

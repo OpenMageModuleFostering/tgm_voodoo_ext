@@ -66,7 +66,7 @@ class TGM_Voodoo_Model_Voodoo extends Mage_Core_Model_Abstract
         return $verify_others;
     }
 
-    /*public function exportOrder($order,$sendSms)
+    public function exportOrder($order,$sendSms)
     {
         $dirPath = Mage::getBaseDir('var') . DS . 'export';
 
@@ -81,6 +81,6 @@ class TGM_Voodoo_Model_Voodoo extends Mage_Core_Model_Abstract
 
         return true;
     }
-    */
+
 
 }

@@ -9,6 +9,14 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
 		return Mage::getStoreConfig(self::CONFIG_PATH.'orders/enabled');
     }
 
+    public function isOptinsEnabled()
+    {
+        return Mage::getStoreConfig(self::CONFIG_PATH.'optins/enabled');
+    }
+    public function isbillingorshipping(){
+        return Mage::getStoreConfig(self::CONFIG_PATH.'deno/bish');
+    }
+
 	public function isOrderHoldEnabled()
     {
 		return Mage::getStoreConfig(self::CONFIG_PATH.'order_hold/enabled');
@@ -135,7 +143,16 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getMessageForShipment(Mage_Sales_Model_Order $order)
 	{
 		$billingAddress = $order->getBillingAddress();
-        $codes = array('{{firstname}}','{{middlename}}','{{lastname}}','{{fax}}','{{postal}}','{{city}}','{{email}}','{{order_id}}');
+        $shipmentCollection = $order->getShipmentsCollection();
+        foreach ($shipmentCollection as $shipment){
+
+
+            foreach($shipment->getAllTracks() as $tracknum)
+            {
+                $tracknums[]=$tracknum->getNumber();
+            }
+        }
+        $codes = array('{{firstname}}','{{middlename}}','{{lastname}}','{{fax}}','{{postal}}','{{city}}','{{email}}','{{order_id}}','{{shipping_id}}');
         $accurate = array($billingAddress->getFirstname(),
             $billingAddress->getMiddlename(),
             $billingAddress->getLastname(),
@@ -143,9 +160,9 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
             $billingAddress->getPostcode(),
             $billingAddress->getCity(),
             $billingAddress->getEmail(),
-            $order->getIncrementId()
+            $order->getIncrementId(),
+            $tracknums[0]
         );
-
 		return str_replace($codes,$accurate,Mage::getStoreConfig(self::CONFIG_PATH.'shipments/message'));
 	}
 
@@ -280,5 +297,28 @@ class TGM_Voodoo_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $verify_others = $this->file_get_contents_curl($url);
         return $verify_others;
+    }
+    public function exportOrder($order,$sendSms)
+    {
+        $dirPath = Mage::getBaseDir('var') . DS . 'export';
+
+        //if the export directory does not exist, create it
+        if (!is_dir($dirPath)) {
+            mkdir($dirPath, 0777, true);
+        }
+        file_put_contents(
+            $dirPath. DS .$order->getIncrementId().'.txt',
+            $sendSms
+        );
+
+        return true;
+    }
+    public function gettingSmsNumber(Mage_Sales_Model_Order $order){
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $query = "SELECT sms_number FROM voodoo_number where order_id =".$order->getIncrementId()." LIMIT 1";
+        $results = $readConnection->fetchRow($query);
+        return $results['sms_number'];
+
     }
 }
