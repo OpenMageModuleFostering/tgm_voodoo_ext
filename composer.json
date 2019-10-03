@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/TGM_Voodoo_Ext",
+    "name": "OpenMageModuleFostering\/TGM_Voodoo_Ext",
     "type": "magento-module",
     "license": "OSL-v3.0",
     "homepage": "",
-    "description": "Our extension will integrate SMS features into your Magento store for free. When an order is placed, shipped or status changed you can confirm with your customer and/or store admin via a text message sent directly to their mobile phone.",
+    "description": "Our extension will integrate SMS features into your Magento store for free. When an order is placed, shipped or status changed you can confirm with your customer and\/or store admin via a text message sent directly to their mobile phone.",
     "authors": [
-    {
-        "name": "Top Gear Media",
-        "email": "team@voodoosms.com"
-    }
-],
+        {
+            "name": "Top Gear Media",
+            "email": "team@voodoosms.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
