@@ -1,3 +1,5 @@
+
+
 ## Original Package Description
 
 Our extension will integrate SMS features into your Magento store for free. When an order is placed, shipped or status changed you can confirm with your customer and/or store admin via a text message sent directly to their mobile phone.
